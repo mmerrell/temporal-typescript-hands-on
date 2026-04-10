@@ -1,8 +1,8 @@
 ---
 slug: local-activities
-id:
+id: dh90vjak5kmg
 type: challenge
-title: "Exercise 4: Local Activities"
+title: 'Exercise 4: Local Activities'
 teaser: Reduce transaction volume by converting validateRFI to a local activity.
 notes:
 - type: text
@@ -13,20 +13,24 @@ notes:
 
     The payoff is visible in the event history: a MarkerRecorded event instead of an ActivityTaskScheduled/Completed pair.
 tabs:
-- title: Terminal 1 - Worker
+- id: seyziujjhe1w
+  title: Terminal 1 - Worker
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: Terminal 2 - Starter
+- id: xsl4pllms8tc
+  title: Terminal 2 - Starter
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: VS Code
+- id: 83ptx2fua3u3
+  title: VS Code
   type: service
   hostname: workshop-host
   path: ?folder=/workspace/exercise&openFile=/workspace/exercise/src/workflow.ts
   port: 8443
-- title: Temporal Web UI
+- id: ckquxlbcchk1
+  title: Temporal Web UI
   type: service
   hostname: workshop-host
   path: /

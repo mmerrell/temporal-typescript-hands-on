@@ -1,8 +1,8 @@
 ---
 slug: child-workflows
-id:
+id: 4dlpoyviqpdb
 type: challenge
-title: "Exercise 2: Child Workflows"
+title: 'Exercise 2: Child Workflows'
 teaser: Decompose rfiWorkflow into a parent and child workflow.
 notes:
 - type: text
@@ -11,20 +11,24 @@ notes:
 
     The parent workflow handles validation. A new child workflow handles reviewer assignment and stakeholder notification. Each has its own independent event history in the Temporal UI.
 tabs:
-- title: Terminal 1 - Worker
+- id: w6unq0wwnkxb
+  title: Terminal 1 - Worker
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: Terminal 2 - Starter
+- id: tdkqiyxfjrwy
+  title: Terminal 2 - Starter
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: VS Code
+- id: m1sv2dyuozlg
+  title: VS Code
   type: service
   hostname: workshop-host
   path: ?folder=/workspace/exercise&openFile=/workspace/exercise/src/workflow.ts
   port: 8443
-- title: Temporal Web UI
+- id: 2qqzipcuvzyn
+  title: Temporal Web UI
   type: service
   hostname: workshop-host
   path: /

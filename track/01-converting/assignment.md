@@ -1,8 +1,8 @@
 ---
 slug: converting
-id:
+id: 9rdxu3nfjczu
 type: challenge
-title: "Exercise 1: Converting to Temporal"
+title: 'Exercise 1: Converting to Temporal'
 teaser: Convert a naive async function into a Temporal workflow with activities.
 notes:
 - type: text
@@ -11,20 +11,24 @@ notes:
 
     The exercise code calls activities directly — no Temporal involved. Your job is to introduce `proxyActivities`, wire up the workflow, and run it.
 tabs:
-- title: Terminal 1 - Worker
+- id: cayqyupz5rl5
+  title: Terminal 1 - Worker
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: Terminal 2 - Starter
+- id: rjoft5byjomg
+  title: Terminal 2 - Starter
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: VS Code
+- id: whgowxnshzhw
+  title: VS Code
   type: service
   hostname: workshop-host
   path: ?folder=/workspace/exercise&openFile=/workspace/exercise/src/workflow.ts
   port: 8443
-- title: Temporal Web UI
+- id: aingyzjisjaw
+  title: Temporal Web UI
   type: service
   hostname: workshop-host
   path: /

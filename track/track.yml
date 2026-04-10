@@ -1,6 +1,8 @@
 slug: temporal-typescript-hands-on
-title: "Temporal TypeScript Hands-On"
-teaser: Four exercises for learning the Temporal TypeScript SDK — from converting naive code to production patterns.
+id: fyd5j6oi4x52
+title: Temporal TypeScript Hands-On
+teaser: Four exercises for learning the Temporal TypeScript SDK — from converting
+  naive code to production patterns.
 description: |-
   Hands-on exercises for the Temporal TypeScript SDK. Each exercise builds on the previous one.
 
@@ -25,4 +27,5 @@ lab_config:
   hideStopButton: false
   default_layout: AssignmentLeft
   default_layout_sidebar_size: 35
+checksum: "4273737664656847787"
 enhanced_loading: false

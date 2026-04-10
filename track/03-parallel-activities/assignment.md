@@ -1,9 +1,10 @@
 ---
 slug: parallel-activities
-id:
+id: mjzmv2sb3d9d
 type: challenge
-title: "Exercise 3: Parallel Activities"
-teaser: Fan out stakeholder notifications to multiple reviewers in parallel using Promise.all.
+title: 'Exercise 3: Parallel Activities'
+teaser: Fan out stakeholder notifications to multiple reviewers in parallel using
+  Promise.all.
 notes:
 - type: text
   contents: |-
@@ -11,20 +12,24 @@ notes:
 
     The key pattern: Promise.all with Array.map. All three notifications fire at the same time — you'll see this in the event timestamps in the Temporal Web UI.
 tabs:
-- title: Terminal 1 - Worker
+- id: mxikhjapoom9
+  title: Terminal 1 - Worker
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: Terminal 2 - Starter
+- id: nd7cky1kyvqn
+  title: Terminal 2 - Starter
   type: terminal
   hostname: workshop-host
   workdir: /workspace/exercise
-- title: VS Code
+- id: dgyr8sbchmrb
+  title: VS Code
   type: service
   hostname: workshop-host
   path: ?folder=/workspace/exercise&openFile=/workspace/exercise/src/reviewWorkflow.ts
   port: 8443
-- title: Temporal Web UI
+- id: hpvl3h15olow
+  title: Temporal Web UI
   type: service
   hostname: workshop-host
   path: /
