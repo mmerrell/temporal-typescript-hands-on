@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+rm -rf /workspace/exercise /workspace/solution
+cp -r /workspace/workshop/1_converting/exercise /workspace/exercise
+cp -r /workspace/workshop/1_converting/solution /workspace/solution
+echo "Exercise 1 ready."

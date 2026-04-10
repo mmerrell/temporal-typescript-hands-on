@@ -1,0 +1,115 @@
+#!/bin/bash
+set -euxo pipefail
+
+# ─── System packages ────────────────────────────────────────────────────────
+apt-get update && apt-get install -y --no-install-recommends \
+    wget curl git vim nano unzip ca-certificates bash-completion
+
+# ─── Node.js 22 ─────────────────────────────────────────────────────────────
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+apt-get install -y nodejs
+node --version && npm --version
+
+# ─── Temporal CLI + dev server ───────────────────────────────────────────────
+curl -sSf https://temporal.download/cli.sh | sh
+ln -sf /root/.temporalio/bin/temporal /usr/local/bin/temporal
+
+mkdir -p /workspace
+
+cat > /etc/systemd/system/temporal-server.service <<'EOF'
+[Unit]
+Description=Temporal Dev Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/temporal server start-dev \
+    --ui-port 8080 \
+    --ip 0.0.0.0 \
+    --db-filename /workspace/temporal.db
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/workspace/temporal.log
+StandardError=append:/workspace/temporal.log
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable temporal-server
+systemctl start temporal-server
+
+# Wait for Temporal server to be healthy
+for i in $(seq 1 30); do
+    if temporal operator cluster health --address 127.0.0.1:7233 2>/dev/null | grep -q SERVING; then
+        echo "Temporal server healthy."; break
+    fi
+    sleep 3
+done
+
+# ─── code-server (VS Code in browser) ───────────────────────────────────────
+curl -fsSL https://code-server.dev/install.sh | sh
+code-server --install-extension ms-vscode.vscode-typescript-next
+
+mkdir -p /root/.local/share/code-server/User
+cat > /root/.local/share/code-server/User/settings.json <<'EOF'
+{
+    "workbench.colorTheme": "Default Dark+",
+    "workbench.startupEditor": "none",
+    "security.workspace.trust.enabled": false,
+    "editor.fontSize": 14,
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "workbench.activityBar.visible": false,
+    "workbench.statusBar.visible": true,
+    "editor.suggestOnTriggerCharacters": true
+}
+EOF
+
+cat > /etc/systemd/system/code-server.service <<'EOF'
+[Unit]
+Description=Code Server
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/code-server --host 0.0.0.0 --port 8443 --cert --auth none /workspace/workshop
+StandardOutput=append:/workspace/code-server.log
+StandardError=append:/workspace/code-server.log
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable code-server && systemctl start code-server
+
+# ─── Clone workshop repo ─────────────────────────────────────────────────────
+git clone https://github.com/mmerrell/temporal-typescript-hands-on.git \
+    /workspace/workshop
+cd /workspace/workshop
+
+# ─── Pre-install npm dependencies for all exercises ─────────────────────────
+for dir in \
+    1_converting/exercise \
+    1_converting/solution \
+    2_child_workflows/exercise \
+    2_child_workflows/solution \
+    3_parallel_activities/exercise \
+    3_parallel_activities/solution \
+    4_local_activities/exercise \
+    4_local_activities/solution; do
+    echo "Installing deps: $dir"
+    (cd "/workspace/workshop/$dir" && npm install --silent)
+done
+
+# ─── Shell environment ───────────────────────────────────────────────────────
+cat >> /root/.bashrc <<'EOF'
+
+export TEMPORAL_ADDRESS="127.0.0.1:7233"
+EOF
+
+echo "VM setup complete."

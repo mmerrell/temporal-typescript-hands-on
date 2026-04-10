@@ -1,0 +1,28 @@
+#!/bin/bash
+fail() { echo "FAIL: $1"; exit 1; }
+pass() { echo "PASS: $1"; }
+
+FILE="/workspace/exercise/src/reviewWorkflow.ts"
+
+if ! grep -q "Promise.all" "$FILE"; then
+    fail "Promise.all not found in reviewWorkflow.ts. Use Promise.all to fan out notifications."
+fi
+pass "Promise.all found"
+
+if ! grep -q "\.map(" "$FILE"; then
+    fail "Array.map not found. Use reviewers.map(...) inside Promise.all."
+fi
+pass "Array.map found"
+
+# Check that a workflow completed with three notifications
+COMPLETED=$(temporal workflow list \
+    --address 127.0.0.1:7233 \
+    --query 'TaskQueue="rfi-task-queue" AND ExecutionStatus="Completed" AND WorkflowId="review-RFI-1003"' \
+    2>/dev/null | grep -c "Completed" || true)
+
+if [ "$COMPLETED" -lt 1 ]; then
+    fail "review-RFI-1003 has not completed. Run the worker and starter, then try again."
+fi
+pass "review-RFI-1003 completed"
+
+echo "Exercise 3 complete."

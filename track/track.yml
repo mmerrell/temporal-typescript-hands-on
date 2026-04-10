@@ -1,0 +1,28 @@
+slug: temporal-typescript-hands-on
+title: "Temporal TypeScript Hands-On"
+teaser: Four exercises for learning the Temporal TypeScript SDK — from converting naive code to production patterns.
+description: |-
+  Hands-on exercises for the Temporal TypeScript SDK. Each exercise builds on the previous one.
+
+  - **Exercise 1**: Convert a naive async function into a Temporal workflow with activities
+  - **Exercise 2**: Decompose a workflow into parent and child workflows
+  - **Exercise 3**: Fan out to multiple reviewers in parallel using Promise.all
+  - **Exercise 4**: Optimize cost with local activities for lightweight tasks
+icon: https://storage.googleapis.com/instruqt-frontend/img/tracks/default.png
+tags:
+- temporal
+- typescript
+owner: temporal
+developers:
+- marcus.merrell@temporal.io
+idle_timeout: 1800
+timelimit: 7200
+lab_config:
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: true
+  loadingMessages: true
+  hideStopButton: false
+  default_layout: AssignmentLeft
+  default_layout_sidebar_size: 35
+enhanced_loading: false

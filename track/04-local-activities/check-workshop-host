@@ -1,0 +1,32 @@
+#!/bin/bash
+fail() { echo "FAIL: $1"; exit 1; }
+pass() { echo "PASS: $1"; }
+
+FILE="/workspace/exercise/src/workflow.ts"
+
+if grep -q "proxyActivities" "$FILE" && grep -q "validateRFI" "$FILE"; then
+    # Check that validateRFI is NOT in a proxyActivities block
+    # (it should only appear in proxyLocalActivities)
+    if grep -A5 "proxyActivities" "$FILE" | grep -q "validateRFI"; then
+        fail "validateRFI is still in proxyActivities. Move it to proxyLocalActivities."
+    fi
+fi
+pass "validateRFI not in proxyActivities"
+
+if ! grep -q "proxyLocalActivities" "$FILE"; then
+    fail "proxyLocalActivities not found in workflow.ts."
+fi
+pass "proxyLocalActivities found"
+
+# Check that rfi-RFI-1004 completed
+COMPLETED=$(temporal workflow list \
+    --address 127.0.0.1:7233 \
+    --query 'TaskQueue="rfi-task-queue" AND ExecutionStatus="Completed" AND WorkflowId="rfi-RFI-1004"' \
+    2>/dev/null | grep -c "Completed" || true)
+
+if [ "$COMPLETED" -lt 1 ]; then
+    fail "rfi-RFI-1004 has not completed. Run the worker and starter, then try again."
+fi
+pass "rfi-RFI-1004 completed"
+
+echo "Exercise 4 complete."

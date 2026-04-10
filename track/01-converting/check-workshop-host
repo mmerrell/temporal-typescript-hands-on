@@ -1,0 +1,34 @@
+#!/bin/bash
+fail() { echo "FAIL: $1"; exit 1; }
+pass() { echo "PASS: $1"; }
+
+# Check that proxyActivities is used in the workflow
+FILE="/workspace/exercise/src/workflow.ts"
+
+if grep -q "from './activities'" "$FILE" && ! grep -q "import type" "$FILE"; then
+    fail "Still importing activities directly. Use 'import type' instead."
+fi
+pass "No direct activity implementation import"
+
+if ! grep -q "proxyActivities" "$FILE"; then
+    fail "proxyActivities not found in workflow.ts. Make sure you're using the Temporal SDK."
+fi
+pass "proxyActivities found"
+
+if ! grep -q "export async function rfiWorkflow" "$FILE"; then
+    fail "rfiWorkflow is not exported. Add 'export' to the function declaration."
+fi
+pass "rfiWorkflow exported"
+
+# Check that at least one workflow completed on the task queue
+COMPLETED=$(temporal workflow list \
+    --address 127.0.0.1:7233 \
+    --query 'TaskQueue="rfi-task-queue" AND ExecutionStatus="Completed"' \
+    2>/dev/null | grep -c "Completed" || true)
+
+if [ "$COMPLETED" -lt 1 ]; then
+    fail "No completed workflows found. Run the worker and starter, then try again."
+fi
+pass "At least one workflow completed"
+
+echo "Exercise 1 complete."
