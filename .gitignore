@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# TypeScript build output
+lib/
+
+# ts-node cache
+*.tsbuildinfo
+
+# OS
+.DS_Store
+
+# Temporal worker bundles (generated at runtime)
+workflow-bundle-*.js
