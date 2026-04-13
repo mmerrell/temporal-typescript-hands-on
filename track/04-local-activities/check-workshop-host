@@ -4,16 +4,19 @@ pass() { echo "PASS: $1"; }
 
 FILE="/workspace/exercise/src/workflow.ts"
 
-if grep -q "proxyActivities" "$FILE" && grep -q "validateRFI" "$FILE"; then
-    # Check that validateRFI is NOT in a proxyActivities block
-    # (it should only appear in proxyLocalActivities)
-    if grep -A5 "proxyActivities" "$FILE" | grep -q "validateRFI"; then
+# Strip comment lines before checking so comments don't trigger false failures
+CODE=$(grep -v '^\s*//' "$FILE")
+
+# Check that proxyActivities is not used for validateRFI in actual code
+if echo "$CODE" | grep -q "proxyActivities"; then
+    if echo "$CODE" | grep -A5 "proxyActivities" | grep -q "validateRFI"; then
         fail "validateRFI is still in proxyActivities. Move it to proxyLocalActivities."
     fi
 fi
 pass "validateRFI not in proxyActivities"
 
-if ! grep -q "proxyLocalActivities" "$FILE"; then
+# Check that proxyLocalActivities is present in actual code
+if ! echo "$CODE" | grep -q "proxyLocalActivities"; then
     fail "proxyLocalActivities not found in workflow.ts."
 fi
 pass "proxyLocalActivities found"
